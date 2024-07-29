@@ -1,0 +1,36 @@
+<div class="flex flex-col gap-2 sticky top-10 border bg-zinc-950 border-zinc-800 text-gray-200 rounded-lg p-5">
+
+    <div class="flex justify-between">
+        <div class="flex items-center gap-1 font-grotesk">
+            <h2 class="text-lg text-white">{{cheer_log.user_name}}</2>
+        </div>
+        <div class="flex items-center">
+            <img src="https://media.tenor.com/izJVS6Wb-lYAAAAi/bits.gif" class="w-5" alt="">
+            <h2 class="font-grotesk font-medium">{{cheer_log.bits}}</h2>
+        </div>    
+    </div>
+
+    <p class="font-work text-gray-300">Input: {{cheer_log.message}}</p>
+
+    <div id="sfx-request-list" class="flex flex-col gap-2">
+        {% for sfx_request in cheer_log.soundeffectrequest_set.all %}
+        {% include "dashboard/partials/sfx_control.html" with sfx=sfx_request %}
+        {% endfor %}
+    </div>
+
+
+    <form 
+    class="flex w-full"
+    hx-target="#sfx-request-list"
+    hx-swap="beforeend"
+    hx-post="{% url 'dashboard:hx-generate-sfx' %}">
+    <input type="hidden" name="cheer_log_id" value="{{cheer_log.id}}">
+        <button
+        type="submit" 
+        class="w-full text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 font-medium rounded-md text-sm px-5 py-2.5 text-center me-2 mb-2">
+            Generate again
+        </button>
+    </form>
+
+
+</div>

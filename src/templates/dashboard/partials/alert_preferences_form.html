@@ -1,0 +1,109 @@
+{% load widget_tweaks %}
+
+<form hx-post="{% url 'dashboard:alert-preferences' %}">
+    <h2 class="text-lg font-grotesk text-white pt-5">
+        General preferences
+    </h2>
+
+    <div class="flex justify-between flex-col-reverse md:flex-row gap-2">     
+        <div class="md:py-5">
+            <p class="text-gray-200 font-grotesk font-medium">Auto generate sound effects</p>
+            <p class="text-gray-200 font-grotesk text-sm">
+                When enabled the messages that match the set requirements
+                will automatically generate a sound effect using the cheer 
+                message as a prompt.
+            </p>
+        </div>
+
+        <label class="inline-flex items-center cursor-pointer pt-5 md:pt-0">
+            {% render_field form.auto_generate type="checkbox" class="sr-only peer" %}
+           
+            <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all  peer-checked:bg-purple-600 "></div>
+        </label>
+    </div>
+
+<div class="flex justify-between flex-col-reverse md:flex-row gap-2">
+    <div class="pb-5 md:py-5">
+        <p class="text-gray-200 font-grotesk font-medium">Auto play on stream</p>
+        <p class="text-gray-200 font-grotesk text-sm">
+            When enabled the generated sound effects will play in your 
+            live stream automatically.
+        </p>
+    </div>
+
+    <label class="inline-flex items-center cursor-pointer pt-5 md:pt-0">
+        {% render_field form.auto_play type="checkbox" class="sr-only peer" %}
+        <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all  peer-checked:bg-purple-600 "></div>
+    </label>
+
+</div>
+
+<hr class="border-zinc-800 ">
+
+<h2 class="pt-5 font-grotesk text-lg text-gray-200">Cheer requirements</h2>
+
+<div class="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-8 ">
+    <div class="pt-5">
+        <label for="bits-input" class="block mb-2 text-sm font-grotesk font-medium text-gray-200 ">Bits ammount</label>
+        <div class="relative">
+            <div class="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none">
+                <img src="https://media.tenor.com/izJVS6Wb-lYAAAAi/bits.gif" class="w-5" alt="">
+            </div>
+            
+            {% render_field form.min_bits|add_error_class:"border-red-500"|attr:"required"|attr:"min:1" type="number" class="input-text ps-10" placeholder="200" %}
+            
+        </div>
+        {% if form.min_bits.errors %}<div class="text-sm text-red-500 font-grotesk">{{form.min_bits.errors}}</div>{%endif%}
+        <div class="pt-5 flex justify-between">
+            <div>
+                <p class="text-gray-200 font-medium font-grotesk">Exact ammount match</p>
+                <p class="text-gray-200 font-grotesk text-sm">
+                    When enabled the cheers must match the set ammount for the 
+                    sound effect to be generated. Otherwise, any cheer bigger 
+                    than the set value will be used to generate a sound effect.
+                </p>
+            </div>
+            <label class="inline-flex items-center cursor-pointer">
+                {% render_field form.match_bits type="checkbox" class="sr-only peer" %}
+                <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all  peer-checked:bg-purple-600 "></div>
+            </label>
+        </div>
+    </div>
+
+    <div class="pt-5">
+        <label 
+        for="cmd-input" 
+        class="block mb-2 text-sm font-grotesk font-medium text-gray-200 ">
+            Command
+        </label>
+        <div class="relative">
+            {% render_field form.command_string class="input-text" placeholder="Your custom command"%}
+        </div>
+        <div class="pt-5 flex justify-between">
+            <div>
+                <p class="text-gray-200 font-medium font-grotesk">Use command</p>
+                <p class="text-gray-200 font-grotesk text-sm">
+                    Only messages that start with the specified command will 
+                    generate a sound effect.
+                </p>
+            </div>
+            <label class="inline-flex items-center cursor-pointer">
+                {% render_field form.match_command type="checkbox" class="sr-only peer" %}
+                <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all  peer-checked:bg-purple-600 "></div>
+            </label>
+        </div>
+    </div>
+</div>
+
+
+<button
+    type="submit" 
+    class="m-10 float-end text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 font-medium rounded-md text-sm px-5 py-2.5 text-center me-2 mb-2">
+        Save preferences
+</button>
+
+</form>
+
+
+
+{% include 'dashboard/ui/toast.html' %}

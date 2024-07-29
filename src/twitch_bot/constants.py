@@ -1,0 +1,5 @@
+WEBHOOK_TYPE_HEADER = "Twitch-Eventsub-Message-Type"
+WEBHOOK_ID_HEADER = "Twitch-Eventsub-Message-Id"
+WEBHOOK_RESEND_HEADER = "Twitch-Eventsub-Message-Retry"
+WEBHOOK_SIGNATURE_HEADER = "Twitch-Eventsub-Message-Signature"
+WEBHOOK_TIMESTAMP_HEADER = "Twitch-Eventsub-Message-Timestamp"

@@ -1,0 +1,48 @@
+{% extends 'dashboard/base.html' %}
+
+
+{% block title %}
+Overview
+{% endblock %}
+
+{% block dashcontent %}
+
+
+<div class="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-8 mt-10 flex-row-reverse">
+    <div class="text-gray-200 rounded-lg flex flex-col gap-5">
+
+        {% for log in logs %}
+        {% include "dashboard/partials/log_card.html" with cheer_log=log%}
+        {%endfor%}
+
+    </div>
+    
+    <div id="log-details" class="relative">
+      <div class="sticky top-10 border border-dashed border-zinc-800 text-gray-500 rounded-lg p-10  text-center align-middle">
+
+            <p>Select a prompt to see the details</p>
+      
+      </div>
+    </div>
+</div>
+
+<script>
+   var active = null;
+
+   function setActive(event) {
+      if (active != null){
+         active.classList.remove('bg-purple-900', 'border-purple-900')
+         active.classList.add('border-zinc-800')
+      }
+
+      
+      active = event
+      active.classList.remove('border-zinc-800')
+      active.classList.add('bg-purple-900', 'border-purple-900')
+   }
+</script>
+
+{% endblock %}
+
+
+

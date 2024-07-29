@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% include "dashboard/partials/header.html" %}
+
+    <!--Django Messages wrapper.-->
+    <section id="system-message" class="fixed top-5 right-5"></section>
+
+    {% block dashcontent %}
+    {% endblock %}
+
+
+{% endblock %}

@@ -1,0 +1,23 @@
+<media-controller audio class="bg-transparent">
+    <audio
+    slot="media"
+    src="{{sfx_request.generated_file.url}}"
+    crossorigin
+    >
+    </audio>
+    <media-control-bar class="flex justify-between border border-zinc-800 rounded-md items-center">
+    
+        <div class="align-middle">
+            <media-play-button class="bg-transparent"></media-play-button>
+            <media-time-display class="bg-transparent m-0 p-0"></media-time-display>
+            <span>:</span>
+            <media-duration-display class="bg-transparent m-0 p-0"></media-duration-display>
+        </div>
+        <span 
+        hx-get="{% url 'dashboard:hx-send-sfx-to-consumers' sfx_request_id=sfx_request.id %}" 
+        hx-swap="none"
+        class="text-sm px-2">
+            Play on stream
+        </span>
+    </media-control-bar>
+</media-controller>

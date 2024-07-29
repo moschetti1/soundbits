@@ -1,0 +1,29 @@
+
+
+
+<div 
+hx-get="{% url 'dashboard:hx-get-log-details' cheer_log_id=cheer_log.id %}"
+hx-target="#log-details"
+hx-swap="innerHTML"
+class="flex flex-col gap-2 border border-zinc-800 cursor-pointer  p-5 rounded-lg transition duration-150 " 
+onclick="setActive(this)">
+
+    <div class="flex justify-between">
+        <div class="flex items-center">
+            <img src="https://media.tenor.com/izJVS6Wb-lYAAAAi/bits.gif" class="w-5" alt="">
+            <h2 class="font-grotesk font-medium">{{cheer_log.bits}}</h2>
+        </div>
+        
+        <div class="flex items-center gap-1 font-grotesk">
+            <span class="w-2.5 h-2.5 bg-red-400 rounded-full"></span> 
+            <p>Failed</p>
+        </div>
+    </div>
+    
+    <h2 class="font-grotesk text-white text-lg">{{cheer_log.user_name}}</h2>
+    <p class="font-work text-gray-300">Input: {{cheer_log.message}}.</p>
+    <span class="text-sm font-work text-gray-400">Jul 10, 2024</span>
+</div>
+    
+
+

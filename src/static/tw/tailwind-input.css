@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+   /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+  }
+}
+
+@layer components {
+    .input-text {
+        @apply w-full border-zinc-800 border bg-zinc-950 text-gray-200 text-sm rounded-lg focus:ring-zinc-800 focus:border-zinc-500 block p-2.5
+    }
+}

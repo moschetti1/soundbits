@@ -1,0 +1,27 @@
+{% extends 'overlay/base.html' %}
+
+{% block content %}
+
+<div hx-ext="ws" ws-connect="{{socket_url}}">
+    
+    <audio id="player" hx-swap-oob="outerHTML">
+
+    </audio>
+    
+</div>
+
+
+<script>
+    function hidePlayer() {
+        let audio = document.getElementById("player")
+        audio.style.display = "none"
+    }
+
+    function play() {
+        let audio = document.getElementById("player")
+        audio.play()
+    }
+
+</script>
+
+{% endblock %}
