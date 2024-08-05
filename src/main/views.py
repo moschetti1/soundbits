@@ -1,3 +1,4 @@
+import logging
 import json
 
 from django.shortcuts import render, get_object_or_404
@@ -13,8 +14,17 @@ from django.contrib.auth import get_user_model
 from allauth.socialaccount.models import SocialAccount
 from .models import AlertPreferences, SoundEffectRequest, CheerEventLogEntry
 from .forms import AlertPreferencesForm, GenerateSfxForm
+from .constants import (
+    DONE_STATUS,
+    FAILED_STATUS, 
+    IGNORED_STATUS,
+    NEW_STATUS,
+)
 from .services import TwitchWebhookHandler, SoundEffectRequestService
+from billing.constants import SubscriptionPlanOptions
+from billing.services import BillingService
 
+logger =  logging.getLogger('django')
 
 #Public views (Webhook & Overlay)
 @csrf_exempt
@@ -27,9 +37,11 @@ def twitch_eventsub_callback(request):
     )
 
     if not request_handler.is_verified():
+        logger.warning("Twitch webhook: signature mismatch on received event.")
         return HttpResponseForbidden("Signatures don't match")
 
     if request_handler.is_challenge():
+        logger.info("Twitch webhook: challenge request received.")
         return HttpResponse(
             body["challenge"], 
             content_type="text/plain"
@@ -37,21 +49,23 @@ def twitch_eventsub_callback(request):
 
     notification_id = body["subscription"]["id"]
     notification_type = body["subscription"]["type"]
-    notification_data = body["event"]
-    social_account_id = notification_data["broadcaster_user_id"]
 
-    if request_handler.is_duplicate():
-        if CheerEventLogEntry.objects.filter(twitch_message_id=notification_id).exists():
-            return HttpResponse()
+    if request_handler.is_duplicate() and CheerEventLogEntry.objects.filter(twitch_message_id=notification_id).exists():
+        logger.info("Twitch webhook: Duplicate event message already handled.")
+        return HttpResponse()
     
     if not notification_type == "channel.cheer":
+        logger.warning("Twitch webhook: unallowed event type.")
         return HttpResponse()
-        
+
+    notification_data = body["event"]
+    social_account_id = notification_data["broadcaster_user_id"]    
     try:
         social_user = SocialAccount.objects.get(uid=social_account_id)
         user = social_user.user
         alert_preferences = user.alertpreferences
     except:
+        logger.warning("Twitch webhook: Missing social account for twitch user.")
         return HttpResponse()
     
     cheer_event_log, meets_requirements = SoundEffectRequestService.save_cheer_event(
@@ -60,9 +74,9 @@ def twitch_eventsub_callback(request):
         notification_data,
         notification_id
     )
-    
     if meets_requirements and alert_preferences.auto_generate:
         SoundEffectRequestService.generate_sfx.after_response(
+            user,
             cheer_event_log, 
             send_to_consumers=alert_preferences.auto_play
         )
@@ -85,8 +99,15 @@ def broadcaster_overlay(request, user_id):
 @login_required
 def overview(request):
     template_name = "dashboard/overview.html"
-    logs = CheerEventLogEntry.objects.filter(internal_broadcaster_user=request.user)
-    context = {"username": request.user.username, "logs": logs}
+    logs = CheerEventLogEntry.objects.filter(internal_broadcaster_user=request.user).order_by("-timestamp")
+    context = {
+        "username": request.user.username, 
+        "logs": logs,
+        "failed_status": FAILED_STATUS,
+        "done_status": DONE_STATUS,
+        "ignored_status": IGNORED_STATUS,
+        "new_status": NEW_STATUS
+        }
     return render(request, template_name, context)
 
 
@@ -94,7 +115,13 @@ def overview(request):
 def hx_get_log_details(request, cheer_log_id):
     template_name = "dashboard/partials/log_details.html"
     cheer_log_object = get_object_or_404(CheerEventLogEntry, id=cheer_log_id)
-    context = {"cheer_log": cheer_log_object}
+    context = {
+        "cheer_log": cheer_log_object,
+        "failed_status": FAILED_STATUS,
+        "done_status": DONE_STATUS,
+        "ignored_status": IGNORED_STATUS,
+        "new_status": NEW_STATUS
+    }
     return render(request, template_name, context)
 
 
@@ -106,6 +133,7 @@ def hx_generate_sfx(request):
     template_name = "dashboard/partials/sfx_control.html"
     cheer_log_object = get_object_or_404(CheerEventLogEntry, id=cheer_log_id)
     sfx = SoundEffectRequestService.generate_sfx(
+        request.user,
         cheer_log_object, 
         send_to_consumers=False
     )
@@ -115,6 +143,7 @@ def hx_generate_sfx(request):
 
 @login_required
 def hx_send_sfx_to_consumers(request, sfx_request_id):
+    template_name = "dashboard/ui/toast.html"
     sfx = get_object_or_404(SoundEffectRequest, id=sfx_request_id)
     
     if sfx.cheer_event_log.internal_broadcaster_user != request.user:
@@ -126,8 +155,8 @@ def hx_send_sfx_to_consumers(request, sfx_request_id):
     )
     
     SoundEffectRequestService._send_event_to_consumers(str(request.user.id), sfx.generated_file.url)
-
-    return HttpResponse()
+    messages.success(request, "Sent sound effect to your overlay")
+    return render(request, template_name)
 
 
 @login_required
@@ -152,3 +181,37 @@ def alert_preferences_form(request):
     context = {"form":form}
 
     return render(request, template_name, context)
+
+@login_required
+def billing_view(request):
+    context = {
+        "free_plan_constant": SubscriptionPlanOptions.FREE_PLAN,
+        "period_start": False,
+        "period_end": False,
+        "quantity": 0,
+        "customer_portal": settings.LEMON_CUSTOMER_PORTAL_URL
+    }
+    if request.user.billing_plan == SubscriptionPlanOptions.FREE_PLAN:
+        context.update({
+            "used": SoundEffectRequest.objects.filter(
+                cheer_event_log__internal_broadcaster_user=request.user,
+                status=DONE_STATUS,
+                is_metered=False
+            ).count()
+        })
+
+    elif request.user.billing_plan == SubscriptionPlanOptions.PAID_PLAN and request.user.has_lemon_billing_setup:
+        try:
+            current_usage = BillingService.get_current_period_usage(request.user)
+            customer_portal = BillingService.get_user_customer_object(request.user)
+            context.update(customer_portal)
+            context.update(current_usage)
+        except:
+            logger.error(
+                "Billing page: Failed to fetch current plan usage for user: {username}".format(
+                    username=request.user.username
+                )
+            )
+
+    
+    return render(request, "dashboard/billing.html", context)

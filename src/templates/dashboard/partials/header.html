@@ -1,3 +1,6 @@
+{%url 'dashboard:overview' as overview%}
+{%url 'dashboard:alert-preferences' as preferences%}
+{%url 'dashboard:billing' as billing%}
 
 <div class="flex row justify-between items-center">
     
@@ -6,26 +9,26 @@
 
         <nav class="flex p-1 items-center gap-2 bg-zinc-800 rounded-md w-fit" aria-label="Tabs">
             <a
-            href="{% url 'dashboard:overview' %}"
-            class="shrink-0 font-medium text-xs py-1.5 px-3 bg-zinc-950 text-white rounded-lg"
+            href="{{overview}}"
+            class="{%if request.get_full_path == overview %}shrink-0 font-medium text-xs py-1.5 px-3 bg-zinc-950 text-white rounded-lg{%else%}shrink-0 font-medium text-xs py-1.5 px-3 text-gray-400{%endif%}"
             >
             Overview
             </a>
   
             <a
-            href="{% url 'dashboard:alert-preferences' %}"
-            class="shrink-0 font-medium text-xs py-1.5 px-3 text-gray-400"
+            href="{{preferences}}"
+            class="{%if request.get_full_path == preferences %}shrink-0 font-medium text-xs py-1.5 px-3 bg-zinc-950 text-white rounded-lg{%else%}shrink-0 font-medium text-xs py-1.5 px-3 text-gray-400{%endif%}"
             aria-current="page"
             >
             Preferences
             </a>
 
             <a
-            href="#"
-            class="shrink-0 font-medium text-xs py-1.5 px-3 text-gray-400"
+            href="{{billing}}"
+            class="{%if request.get_full_path == billing %}shrink-0 font-medium text-xs py-1.5 px-3 bg-zinc-950 text-white rounded-lg{%else%}shrink-0 font-medium text-xs py-1.5 px-3 text-gray-400{%endif%}"
             aria-current="page"
             >
-            Settings
+            Account Settings
             </a>
         </nav>
   
@@ -35,7 +38,11 @@
     <div class="block">
         <div class="avatar">
             <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                {% if request.user.socialaccount_set.first.extra_data.profile_image_url %}
+                <img class="absolute w-12 text-gray-400" src="{{request.user.socialaccount_set.first.extra_data.profile_image_url}}" alt="">
+                {% else %}
                 <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                {% endif %}
             </div>
         </div>
     </div>

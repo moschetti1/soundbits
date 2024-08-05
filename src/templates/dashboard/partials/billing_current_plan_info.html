@@ -1,0 +1,31 @@
+
+<div class="font-grotesk">
+
+   
+    <h1 class="text-lg text-white pt-5 font-medium">
+        Your subscription |
+        <a href="{{customer_portal}}" target="_blank" class="text-purple-400 inline-flex items-center underline ">
+            Manage
+            <svg height="21" viewBox="0 0 21 21" width="21" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" transform="translate(6 6)"><path d="m8.5 7.5v-7h-7"/><path d="m8.5.5-8 8"/></g></svg>
+        </a>
+    </h1>
+    
+    
+    
+
+    <div class="flex flex-col md:flex-row justify-between py-5">
+        <h2 class="text-gray-200 font-bold">Current Plan</h2>
+        <p class="text-gray-200">{{request.user.get_billing_plan_display}}</p>
+    </div>
+    <hr class="border-zinc-800 ">
+    <div class="flex flex-col md:flex-row justify-between py-5">
+        <h2 class="text-gray-200 font-bold">Usage to date</h2>
+        <p class="text-gray-200">{{quantity}} runs</p>
+    </div>
+    <hr class="border-zinc-800 ">
+    <div class="flex flex-col md:flex-row justify-between py-5">
+        <h2 class="text-gray-200 font-bold">Next bill</h2>
+        <p class="text-gray-200">{{period_end|date:"F d, Y"}}</p>
+    </div>
+    
+</div>

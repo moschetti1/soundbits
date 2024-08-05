@@ -1,0 +1,110 @@
+{
+    "event": "Checkout.Success",
+    "data": {
+      "order": {
+        "meta": {
+          "test_mode": true,
+          "custom_data": {
+            "user_id": "9b52326d-fa46-42c7-bdeb-964873cb61d2"
+          }
+        },
+        "data": {
+          "type": "orders",
+          "id": "3246706",
+          "attributes": {
+            "store_id": 35955,
+            "customer_id": 3404369,
+            "identifier": "be231d51-9265-4728-9eea-c4cd25256f39",
+            "order_number": 359554,
+            "user_name": "jhon salchichon",
+            "user_email": "fran@chesco.io",
+            "currency": "USD",
+            "currency_rate": "1.00000000",
+            "tax_name": "",
+            "tax_rate": "0.00",
+            "tax_inclusive": false,
+            "status": "paid",
+            "status_formatted": "Paid",
+            "refunded": false,
+            "refunded_at": null,
+            "subtotal": 499,
+            "discount_total": 0,
+            "tax": 0,
+            "setup_fee": 499,
+            "total": 499,
+            "subtotal_usd": 499,
+            "discount_total_usd": 0,
+            "tax_usd": 0,
+            "setup_fee_usd": 499,
+            "total_usd": 499,
+            "subtotal_formatted": "$4.99",
+            "discount_total_formatted": "$0.00",
+            "tax_formatted": "$0.00",
+            "setup_fee_formatted": "$4.99",
+            "total_formatted": "$4.99",
+            "first_order_item": {
+              "id": 3192654,
+              "order_id": 3246706,
+              "product_id": 320277,
+              "variant_id": 465822,
+              "price_id": 692470,
+              "product_name": "usage based tiers",
+              "variant_name": "Default",
+              "price": 0,
+              "quantity": 1,
+              "created_at": "2024-08-02T13:00:59.000000Z",
+              "updated_at": "2024-08-02T13:00:59.000000Z",
+              "test_mode": true
+            },
+            "urls": {
+              "receipt": "https://app.lemonsqueezy.com/my-orders/be231d51-9265-4728-9eea-c4cd25256f39?signature=14facf52e04961ca4cd1ac1e7ef330450203aa9d96ffd708cdce6d8ccf2f61f6"
+            },
+            "created_at": "2024-08-02T13:00:58.000000Z",
+            "updated_at": "2024-08-02T13:01:00.000000Z",
+            "test_mode": true
+          },
+          "relationships": {
+            "store": {
+              "links": {
+                "related": "https://api.lemonsqueezy.com/v1/orders/3246706/store",
+                "self": "https://api.lemonsqueezy.com/v1/orders/3246706/relationships/store"
+              }
+            },
+            "customer": {
+              "links": {
+                "related": "https://api.lemonsqueezy.com/v1/orders/3246706/customer",
+                "self": "https://api.lemonsqueezy.com/v1/orders/3246706/relationships/customer"
+              }
+            },
+            "order-items": {
+              "links": {
+                "related": "https://api.lemonsqueezy.com/v1/orders/3246706/order-items",
+                "self": "https://api.lemonsqueezy.com/v1/orders/3246706/relationships/order-items"
+              }
+            },
+            "subscriptions": {
+              "links": {
+                "related": "https://api.lemonsqueezy.com/v1/orders/3246706/subscriptions",
+                "self": "https://api.lemonsqueezy.com/v1/orders/3246706/relationships/subscriptions"
+              }
+            },
+            "license-keys": {
+              "links": {
+                "related": "https://api.lemonsqueezy.com/v1/orders/3246706/license-keys",
+                "self": "https://api.lemonsqueezy.com/v1/orders/3246706/relationships/license-keys"
+              }
+            },
+            "discount-redemptions": {
+              "links": {
+                "related": "https://api.lemonsqueezy.com/v1/orders/3246706/discount-redemptions",
+                "self": "https://api.lemonsqueezy.com/v1/orders/3246706/relationships/discount-redemptions"
+              }
+            }
+          },
+          "links": {
+            "self": "https://api.lemonsqueezy.com/v1/orders/3246706"
+          }
+        }
+      }
+    }
+  }

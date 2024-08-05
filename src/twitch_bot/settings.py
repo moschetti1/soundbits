@@ -30,7 +30,7 @@ SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ["DJANGO_ALLOWED_HOSTS"].split(';')
 
 SITE_ID = 1
 
@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     "after_response",
+    "accounts",
+    "billing",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -106,6 +108,7 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
+AUTH_USER_MODEL = "accounts.Broadcaster"
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -229,6 +232,13 @@ TWITCH_WEBHOOK_CALLBACK = os.environ["TWITCH_WEBHOOK_CALLBACK"]
 #ELEVENLABS API SETTINGS
 ELEVENLABS_API_KEY = os.environ["ELEVENLABS_API_KEY"]
 ELEVENLABS_SFX_ENDPOINT = os.environ["ELEVENLABS_SFX_ENDPOINT"]
+
+#LEMON API SETTINGS
+LEMON_API_KEY = os.environ["LEMON_API_KEY"]
+LEMON_WEBHOOK_SECRET = os.environ["LEMON_WEBHOOK_SECRET"]
+LEMON_WEBHOOK_CALLBACK = os.environ["LEMON_WEBHOOK_CALLBACK"]
+LEMON_CUSTOMER_PORTAL_URL = os.environ["LEMON_CUSTOMER_PORTAL_URL"]
+
 #DJANGO CHANNELS GROUP SETTINGS 
 USE_REDIS = os.environ["USE_REDIS"] == "TRUE"
 
@@ -249,3 +259,31 @@ else:
             "BACKEND": "channels.layers.InMemoryChannelLayer"
         }
     }
+
+
+
+LOGGING = {
+    'version': 1,
+    "disable_existing_loggers": False,
+    'loggers': {
+        'django':{
+            'handlers':['console'],
+            'level':'INFO'
+        }
+    },
+    'handlers': {
+        'console': {
+            'level':'INFO',
+            'class':'logging.StreamHandler',
+            'formatter': 'custom',
+        }
+    },
+    'formatters': {
+        'custom': {
+            'format':  '{name} {asctime} {levelname} :: {message}',
+            'style': '{',
+            "datefmt": "%H:%M:%S",
+        }
+    }
+    
+}

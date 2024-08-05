@@ -2,6 +2,7 @@ import hmac
 import hashlib
 import after_response
 import json
+import logging 
 from django.core.files.base import ContentFile, File
 from allauth.socialaccount.models import SocialAccount
 from asgiref.sync import async_to_sync
@@ -10,7 +11,12 @@ from secrets import compare_digest
 from twitch_bot.client import elevenlabs_create_sfx
 from .models import SoundEffectRequest, CheerEventLogEntry, AlertPreferences
 from twitch_bot.constants import *
-from .constants import NEW_CHEER_EVENT_LOG_STATUS, IGNORED_CHEER_EVENT_LOG_STATUS
+from twitch_bot.exceptions import ElevenLabsApiError
+from .constants import NEW_STATUS, IGNORED_STATUS, FAILED_STATUS, DONE_STATUS
+from billing.services import BillingService
+
+logger = logging.getLogger('django')
+
 
 class TwitchWebhookHandler:
 
@@ -82,7 +88,7 @@ class SoundEffectRequestService:
             alert_preferences, 
             cheer_event_data
         )
-        status = NEW_CHEER_EVENT_LOG_STATUS if meets_requirements else IGNORED_CHEER_EVENT_LOG_STATUS
+        status = NEW_STATUS if meets_requirements else IGNORED_STATUS
 
         cheer_event_log = CheerEventLogEntry.objects.create(
             internal_broadcaster_user=user, 
@@ -95,21 +101,54 @@ class SoundEffectRequestService:
 
     @staticmethod
     @after_response.enable
-    def generate_sfx(cheer_event_log, send_to_consumers=True):
-        response = elevenlabs_create_sfx(
-            cheer_event_log.message,
-            duration_seconds=4
-        )
+    def generate_sfx(user, cheer_event_log, send_to_consumers=True):
+        
+        if not BillingService._is_valid_billing_status(user):
+            sfx_request = SoundEffectRequest.objects.create(
+                cheer_event_log=cheer_event_log,
+                status=FAILED_STATUS,
+                is_metered=False,
+                failed_reason="Not enough credits. Upgrade billing plan."
+            )
+            return sfx_request
+        
+        try:
+            response = elevenlabs_create_sfx(
+                cheer_event_log.message,
+                duration_seconds=4
+            )
+        except ElevenLabsApiError:
+            logger.error("Sound Effect Generation: API call to elevenlabs failed.")
+            sfx_request = SoundEffectRequest.objects.create(
+                cheer_event_log=cheer_event_log,
+                status=FAILED_STATUS,
+                is_metered=False,
+                failed_reason="Failed trying to generate sfx."
+            )
+            return sfx_request
 
         file = response.content 
-
-        sfx_request = SoundEffectRequest.objects.create(
-            cheer_event_log=cheer_event_log
-        )
-        sfx_request.generated_file.save(f"{sfx_request.id}.mp3", ContentFile(file), save=True)
         
+        is_metered = BillingService._has_metered_usage(user)
+        sfx_request = SoundEffectRequest.objects.create(
+            cheer_event_log=cheer_event_log,
+            status=DONE_STATUS,
+            is_metered = is_metered
+        )
+        sfx_request.generated_file.save(
+            f"{sfx_request.id}.mp3", 
+            ContentFile(file), 
+            save=True
+        )
+
         if send_to_consumers:
-            SoundEffectRequestService._send_event_to_consumers(str(cheer_event_log.internal_broadcaster_user.id), sfx_request.generated_file.url)
+            SoundEffectRequestService._send_event_to_consumers(
+                str(user.id), 
+                sfx_request.generated_file.url
+            )
+
+        if is_metered:    
+            BillingService.create_usage_record(user, sfx_request)
 
         return sfx_request
 

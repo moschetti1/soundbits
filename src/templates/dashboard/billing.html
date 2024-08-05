@@ -1,0 +1,57 @@
+{% extends "dashboard/base.html" %}
+
+
+{% block header_scripts %}
+
+
+{% endblock %}
+
+
+{% block dashcontent %}
+
+
+
+{% if request.user.billing_plan  == free_plan_constant%}
+
+{% include "dashboard/partials/billing_free_plan_upgrade_form.html" %}
+{% include "dashboard/partials/free_trial_usage.html" with hide_cta=True%}
+{% else %}
+{% include "dashboard/partials/billing_current_plan_info.html" %}
+{% endif %}
+
+
+<script src="https://assets.lemonsqueezy.com/lemon.js" ></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+
+window.addEventListener('load', function () {
+    LemonSqueezy.Setup({
+        eventHandler: (data) => {
+            if (data.event == "PaymentMethodUpdate.Mounted") {
+                console.log("WoW")
+            }
+            if (data.event == "Checkout.Success") {
+                console.log(data)
+            }
+        }  
+    })
+    //LemonSqueezy.Url.Open("https://justestinguy.lemonsqueezy.com/buy/18f797b4-630a-4aa9-8286-48fbf0487d4e?embed=1&discount=0&checkout[custom][user_id]={{request.user.id}}");
+})
+
+
+
+
+</script>
+{% endblock %}

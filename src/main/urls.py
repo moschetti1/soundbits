@@ -23,5 +23,10 @@ urlpatterns = [
         "alert-preferences/",
         views.alert_preferences_form,
         name="alert-preferences"
+    ),
+    path(
+        "billing/",
+        views.billing_view,
+        name="billing"
     )
 ]

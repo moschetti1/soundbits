@@ -77,7 +77,8 @@ class TwitchClient:
             }
         }
         
-        r = requests.post(endpoint, data=json.dumps(payload), headers=self.headers)
+        r = requests.post(endpoint, json=payload, headers=self.headers)
+        print(r.json())
         if r.status_code != 202:
             raise exceptions.TwitchEventSubCreationFailed
 
@@ -104,9 +105,12 @@ def elevenlabs_create_sfx(message, duration_seconds=4):
     }
     payload = {
         "text": message,
-        "duration_seconds": duration_in_seconds,
+        "duration_seconds": duration_seconds,
         "prompt_influence": 0.3
     }
 
     r = requests.post(url, json=payload, headers=headers)
+    if 200 > r.status_code or r.status_code >= 300:
+        raise exceptions.ElevenLabsApiError
+        
     return r

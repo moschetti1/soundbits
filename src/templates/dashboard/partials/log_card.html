@@ -14,15 +14,32 @@ onclick="setActive(this)">
             <h2 class="font-grotesk font-medium">{{cheer_log.bits}}</h2>
         </div>
         
+        {% if cheer_log.status == failed_status %}
         <div class="flex items-center gap-1 font-grotesk">
             <span class="w-2.5 h-2.5 bg-red-400 rounded-full"></span> 
             <p>Failed</p>
         </div>
+        {% elif cheer_log.status == done_status %}
+        <div class="flex items-center gap-1 font-grotesk">
+            <span class="w-2.5 h-2.5 bg-emerald-400 rounded-full"></span> 
+            <p>Done</p>
+        </div>
+        {% elif cheer_log.status == ignored_status %}
+        <div class="flex items-center gap-1 font-grotesk">
+            <span class="w-2.5 h-2.5 bg-amber-400 rounded-full"></span> 
+            <p>Ignored</p>
+        </div>
+        {% else %}
+        <div class="flex items-center gap-1 font-grotesk">
+            <span class="w-2.5 h-2.5 bg-blue-400 rounded-full"></span> 
+            <p>New</p>
+        </div>
+        {% endif %}
     </div>
     
     <h2 class="font-grotesk text-white text-lg">{{cheer_log.user_name}}</h2>
     <p class="font-work text-gray-300">Input: {{cheer_log.message}}.</p>
-    <span class="text-sm font-work text-gray-400">Jul 10, 2024</span>
+    <span class="text-sm font-work text-gray-400">{{cheer_log.timestamp|date:"F d, Y"}}</span>
 </div>
     
 

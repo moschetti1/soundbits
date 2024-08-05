@@ -1,6 +1,6 @@
 
 {% if messages %}
-<section id="system-message" class="fixed top-5 right-5" hx-swap-oob="true" hx-swap="outerHTML">
+<section id="system-message" class="fixed top-5 right-5 z-10" hx-swap-oob="true" hx-swap="outerHTML">
 
     {% for message in messages %}
     <div id="toast" x-data="{dismissed: false}" x-show="!dismissed" x-init="setTimeout(()=>dismissed=true, 2000)" class="flex items-center w-full max-w-xs p-4 mb-4  rounded-lg shadow text-gray-200 bg-zinc-900" role="alert">
