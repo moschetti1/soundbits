@@ -1,0 +1,42 @@
+# fly.toml app configuration file generated for src-small-fire-4328 on 2024-08-05T21:42:48-03:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'src-small-fire-4328'
+primary_region = 'mia'
+console_command = '/code/manage.py shell'
+
+[build]
+
+[deploy]
+  release_command = 'sh /code/release.sh'
+
+[env]
+  DEBUG = 'FALSE'
+  DJANGO_ALLOWED_HOSTS = 'soundbits.live;www.soundbits.live'
+  PORT = '8000'
+  ELEVENLABS_SFX_ENDPOINT = 'https://api.elevenlabs.io/v1/sound-generation'
+  USE_REDIS = 'TRUE'
+  USE_S3 = 'TRUE'
+  LEMON_CUSTOMER_PORTAL_URL = 'https://soundbits.lemonsqueezy.com/billing'
+  TWITCH_REDIRECT_URI = 'http://soundbits.live/accounts/twitch/login/callback/'
+  STATIC_FILES_FOLDER = 'static'
+  MEDIA_FILES_FOLDER = 'media'
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
+
+[[statics]]
+  guest_path = '/code/static'
+  url_prefix = '/static/'

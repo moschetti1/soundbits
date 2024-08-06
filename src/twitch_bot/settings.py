@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os 
 from pathlib import Path
 from dotenv import load_dotenv
-
+from django.core.management.utils import get_random_secret_key 
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,12 +25,17 @@ load_dotenv(BASE_DIR)
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
+SECRET_KEY = os.environ.get("SECRET_KEY", get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "TRUE") == "TRUE"
 
-ALLOWED_HOSTS = os.environ["DJANGO_ALLOWED_HOSTS"].split(';')
+APP_NAME = os.environ.get("FLY_APP_NAME", False)
+
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", 'localhost;127.0.0.1').split(';')
+
+if APP_NAME:
+    ALLOWED_HOSTS.append(f"{APP_NAME}.fly.dev")
 
 SITE_ID = 1
 
@@ -97,12 +102,24 @@ ASGI_APPLICATION = "twitch_bot.asgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+if DEBUG:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ["DATABASE_NAME"],
+            'USER': os.environ["DATABASE_USER"],
+            'PASSWORD': os.environ["DATABASE_PASS"],
+            'HOST': os.environ["DATABASE_HOST"],
+            'PORT': os.environ["DATABASE_PORT"],
+        }
+    }
 
 
 # Password validation
@@ -132,8 +149,8 @@ AUTHENTICATION_BACKENDS = [
 SOCIALACCOUNT_PROVIDERS = {
     'twitch': {
         'APP': {
-            "client_id": os.environ["TWITCH_APP_CLIENT_ID"],
-            "secret": os.environ["TWITCH_APP_CLIENT_SECRET"],
+            "client_id": os.environ.get("TWITCH_APP_CLIENT_ID", "empty"),
+            "secret": os.environ.get("TWITCH_APP_CLIENT_SECRET", "empty"),
             "key": ""
         },
         'SCOPE': [
@@ -169,25 +186,25 @@ STATICFILES_DIRS = [
 ]
 
 
-USE_S3 = os.environ["USE_S3"] == "TRUE"
+USE_S3 = os.environ.get("USE_S3", "FALSE") == "TRUE"
 
 if USE_S3:
     #Digitalocean/AWS variables
     AWS_ACCESS_KEY_ID = os.environ["AWS_ACCESS_KEY_ID"] #your-spaces-access-key
     AWS_SECRET_ACCESS_KEY = os.environ["AWS_SECRET_ACCESS_KEY"] #your spaces-secret-access-key
-    AWS_STORAGE_BUCKET_NAME = os.environ["AWS_STORAGE_BUCKET_NAME"] #your storage bucket name 
-    AWS_S3_ENDPOINT_URL = "https://nyc3.digitaloceanspaces.com"
+    AWS_STORAGE_BUCKET_NAME = os.environ["BUCKET_NAME"] #your storage bucket name 
+    AWS_S3_ENDPOINT_URL = os.environ["AWS_ENDPOINT_URL_S3"]
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400',
     }
     
     #Static files settings
     STATIC_FILES_FOLDER = os.environ["STATIC_FILES_FOLDER"] #your-spaces-files-folder NOT END IN / 
-    STATIC_URL = f"https://{url}/{folder}".format(url=AWS_S3_ENDPOINT_URL, folder=STATIC_FILES_FOLDER) #this must not end in /
+    STATIC_URL = "https://{url}/{folder}/".format(url=AWS_S3_ENDPOINT_URL, folder=STATIC_FILES_FOLDER) #this must end in /
 
     #Media files settings
     MEDIA_FILES_FOLDER = os.environ["MEDIA_FILES_FOLDER"] #your-spaces-files-folder for public media NOT END IN / 
-    MEDIA_URL = f"https://{url}/{folder}".format(url=AWS_S3_ENDPOINT_URL, folder=MEDIA_FILES_FOLDER) #this must not end in /
+    MEDIA_URL = "https://{url}/{folder}/".format(url=AWS_S3_ENDPOINT_URL, folder=MEDIA_FILES_FOLDER) #this must end in /
 
     STORAGES = {
         "default": {
@@ -223,24 +240,24 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 #Twitch API settings 
-TWITCH_APP_CLIENT_ID = os.environ["TWITCH_APP_CLIENT_ID"]
-TWITCH_APP_CLIENT_SECRET = os.environ["TWITCH_APP_CLIENT_SECRET"]
-TWITCH_REDIRECT_URI = os.environ["TWITCH_REDIRECT_URI"]
-TWITCH_WEBHOOK_SECRET = os.environ["TWITCH_WEBHOOK_SECRET"]
-TWITCH_WEBHOOK_CALLBACK = os.environ["TWITCH_WEBHOOK_CALLBACK"]
+TWITCH_APP_CLIENT_ID = os.environ.get("TWITCH_APP_CLIENT_ID", "")
+TWITCH_APP_CLIENT_SECRET = os.environ.get("TWITCH_APP_CLIENT_SECRET", "")
+TWITCH_REDIRECT_URI = os.environ.get("TWITCH_REDIRECT_URI", "")
+TWITCH_WEBHOOK_SECRET = os.environ.get("TWITCH_WEBHOOK_SECRET", "")
+TWITCH_WEBHOOK_CALLBACK = os.environ.get("TWITCH_WEBHOOK_CALLBACK", "")
 
 #ELEVENLABS API SETTINGS
-ELEVENLABS_API_KEY = os.environ["ELEVENLABS_API_KEY"]
-ELEVENLABS_SFX_ENDPOINT = os.environ["ELEVENLABS_SFX_ENDPOINT"]
+ELEVENLABS_API_KEY = os.environ.get("ELEVENLABS_API_KEY", "")
+ELEVENLABS_SFX_ENDPOINT = os.environ.get("ELEVENLABS_SFX_ENDPOINT", "")
 
 #LEMON API SETTINGS
-LEMON_API_KEY = os.environ["LEMON_API_KEY"]
-LEMON_WEBHOOK_SECRET = os.environ["LEMON_WEBHOOK_SECRET"]
-LEMON_WEBHOOK_CALLBACK = os.environ["LEMON_WEBHOOK_CALLBACK"]
-LEMON_CUSTOMER_PORTAL_URL = os.environ["LEMON_CUSTOMER_PORTAL_URL"]
+LEMON_API_KEY = os.environ.get("LEMON_API_KEY", "")
+LEMON_WEBHOOK_SECRET = os.environ.get("LEMON_WEBHOOK_SECRET", "")
+LEMON_WEBHOOK_CALLBACK = os.environ.get("LEMON_WEBHOOK_CALLBACK", "")
+LEMON_CUSTOMER_PORTAL_URL = os.environ.get("LEMON_CUSTOMER_PORTAL_URL", "")
 
 #DJANGO CHANNELS GROUP SETTINGS 
-USE_REDIS = os.environ["USE_REDIS"] == "TRUE"
+USE_REDIS = os.environ.get("USE_REDIS", "FALSE") == "TRUE"
 
 if USE_REDIS:
     
@@ -248,7 +265,10 @@ if USE_REDIS:
         "default": {
             "BACKEND": "channels_redis.core.RedisChannelLayer",
             "CONFIG": {
-                "hosts": [("127.0.0.1", 6379)]
+                "hosts": [{
+                    "address": os.environ["REDIS_URL"],
+                    "ssl_cert_reqs": None,
+                }]
             }
         }
     }
