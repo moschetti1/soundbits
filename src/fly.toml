@@ -20,7 +20,7 @@ console_command = '/code/manage.py shell'
   USE_REDIS = 'TRUE'
   USE_S3 = 'TRUE'
   LEMON_CUSTOMER_PORTAL_URL = 'https://soundbits.lemonsqueezy.com/billing'
-  TWITCH_REDIRECT_URI = 'http://soundbits.live/accounts/twitch/login/callback/'
+  TWITCH_REDIRECT_URI = 'https://soundbits.live/accounts/twitch/login/callback/'
   STATIC_FILES_FOLDER = 'static'
   MEDIA_FILES_FOLDER = 'media'
 
