@@ -264,15 +264,11 @@ LEMON_CUSTOMER_PORTAL_URL = os.environ.get("LEMON_CUSTOMER_PORTAL_URL", "")
 USE_REDIS = os.environ.get("USE_REDIS", "FALSE") == "TRUE"
 
 if USE_REDIS:
-    
     CHANNEL_LAYERS = {
         "default": {
             "BACKEND": "channels_redis.core.RedisChannelLayer",
             "CONFIG": {
-                "hosts": [{
-                    "address": os.environ["REDIS_URL"],
-                    "ssl_cert_reqs": None,
-                }]
+                "hosts": [os.environ["REDIS_URL"]]
             }
         }
     }

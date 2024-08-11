@@ -12,10 +12,15 @@
 
     <p class="font-work text-gray-300">Input: {{cheer_log.message}}</p>
 
-    <div id="sfx-request-list" class="flex flex-col gap-2">
-        {% for sfx_request in cheer_log.soundeffectrequest_set.all %}
-        {% include "dashboard/partials/sfx_control.html" with sfx=sfx_request %}
-        {% endfor %}
+    <div 
+    id="sfx-request-list" 
+    class="flex flex-col gap-2"
+    hx-get="{% url 'dashboard:hx-sfx-list-for-cheer-log' cheer_log_id=cheer_log.id %}" 
+    hx-trigger="every 5s"
+    hx-swap="innerHTML">
+        
+        {% include "dashboard/partials/sfx_control_list.html" with sfx_list=cheer_log.soundeffectrequest_set.all %}
+        
     </div>
 
 

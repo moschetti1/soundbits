@@ -1,0 +1,314 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+
+
+{% block content %}
+{% static 'sfx_demo/suspense_build_up_en.mp3' as suspense_sfx %}
+{% static 'sfx_demo/oonga_boonga.mp3' as oonga_sfx %}
+{% static 'sfx_demo/car_horns_in_traffic.mp3' as horns_sfx %}
+
+
+<style>
+    body {
+        background-image: url('{% static "images/blurry_bg.webp" %}');
+        background-position-y: -500px;
+
+        transform: rotate(180);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-attachment: scroll;
+    }
+    @media only screen and (max-width: 600px) {
+        body {
+            background-position-y: -1500px;
+            background-position-x: -500px;
+            background-size: cover;
+            transform: rotate(-180);
+        }
+    }
+    @media only screen and (max-width: 1000px) {
+        body {
+            background-position-y: -1000px;
+            background-position-x: -300px;
+            background-size: cover;
+            transform: rotate(-180);
+        }
+    }
+</style>
+
+
+
+<section class="flex flex-col justify-center z-20 mx-auto items-center align-middle min-h-[90vh]">
+
+    <div class="text-center max-w-[900px] mx-auto z-10">
+        <h1 class="text-gray-200 text-3xl md:text-5xl lg:text-6xl font-stix animate-fade">
+            Give your chat another way of interacting with the stream
+        </h1>
+        <p class="text-zinc-300 font-grotesk md:text-xl my-5 py-2 animate-fade" >AI generated sound effects, created from cheers on your chat.</p>
+    </div>
+
+    <div class="flex flex-col md:flex-row justify-center gap-10 mt-10 w-full font-grotesk text-gray-200 max-w-[1200px]">
+
+        {% include "partials/media_player.html" with prompt="Suspense build up" username="jackeyy" audio_source_url=suspense_sfx landing=True %}
+        {% include "partials/media_player.html" with prompt="A man screaming oonga boonga" username="Pokss" audio_source_url=oonga_sfx landing=True %}
+        {% include "partials/media_player.html" with prompt="Car horns in traffic" username="eseltiti1" audio_source_url=horns_sfx landing=True %}
+
+    </div>
+
+    <div class="flex flex-col opacity-0 justify-center items-center mt-10 animate-[fadeIn_0.5s_1s_forwards]">
+        <a href="{% url 'login' %}"
+            class="text-white font-grotesk bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-md text-2xl px-5 py-2.5 text-center mb-2 mx-auto">
+            Try it for free
+        </a>
+        <div class="text-sm text-gray-200">No credit card required</div>
+    </div>
+
+</section>
+
+<section class="flex flex-col md:flex-row items-start md:items-center gap-10 mt-10 p-5 z-20">
+
+    <div class="flex flex-col flex-1 justify-center md:items-center mt-5 md:mt-0">
+        <div
+            class="flex w-6 h-6 items-center justify-center p-5 bg-gradient-to-br from-purple-500 to-purple-700 rounded-md shadow-lg shadow-purple-700/75 border border-purple-400/50">
+            <span>
+                <svg class="text-purple-200 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <g bufferred-rendering="static">
+                        <path
+                            d="M5.34 7.595L1.331 9.436a.564.564 0 000 1.023l4.009 1.842 1.841 4.008a.564.564 0 001.023 0l1.842-4.008 4.009-1.842a.564.564 0 000-1.023l-4.009-1.841-1.842-4.009a.562.562 0 00-1.023 0L5.34 7.595z"
+                            fill-opacity="1"></path>
+                        <path
+                            d="M14.476 3.168l-2.004.921a.28.28 0 000 .511l2.004.921.921 2.004a.282.282 0 00.511 0l.921-2.004 2.004-.921a.282.282 0 000-.511l-2.004-.921-.921-2.004a.28.28 0 00-.511 0l-.921 2.004zM14.476 14.479l-2.004.921a.282.282 0 000 .511l2.004.921.921 2.004a.282.282 0 00.511 0l.921-2.004 2.004-.921a.28.28 0 000-.511l-2.004-.921-.921-2.004a.28.28 0 00-.511 0l-.921 2.004z"
+                            fill-opacity=".45"></path>
+                    </g>
+                </svg>
+            </span>
+        </div>
+
+        <h2 class="text-2xl text-white font-stix mt-5">
+            Unique sounds, everytime
+        </h2>
+        <p class="text-zinc-300 font-grotesk md:text-center">
+            A  unique sound effect will be generated for each prompt you get.
+        </p>
+
+    </div>
+
+    <div class="flex flex-col flex-1 justify-center md:items-center mt-5 md:mt-0">
+        <div
+            class="flex w-6 h-6 items-center justify-center p-5 bg-gradient-to-br from-purple-500 to-purple-700 rounded-md shadow-lg shadow-purple-700/75 border border-purple-400/50">
+            <span>
+                <svg class="text-purple-200 w-5 h-5" viewBox="0 0 23 23" fill="currentColor">
+
+                    <path fill-rule="evenodd"
+                        d="M12 2.25a.75.75 0 0 1 .75.75v9a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM6.166 5.106a.75.75 0 0 1 0 1.06 8.25 8.25 0 1 0 11.668 0 .75.75 0 1 1 1.06-1.06c3.808 3.807 3.808 9.98 0 13.788-3.807 3.808-9.98 3.808-13.788 0-3.808-3.807-3.808-9.98 0-13.788a.75.75 0 0 1 1.06 0Z"
+                        clip-rule="evenodd" />
+                </svg>
+            </span>
+        </div>
+
+        <h2 class="text-2xl text-white font-stix mt-5">
+            Quick setup
+        </h2>
+        <p class="text-zinc-300 font-grotesk md:text-center">
+            Getting started is super easy,
+            you just need to grab your overlay url,
+            add it to obs as a browser source, and
+            that’s it.
+        </p>
+
+    </div>
+
+    <div class="flex flex-col flex-1 md:items-center mt-5 md:mt-0">
+        <div
+            class="flex w-6 h-6 items-center justify-center p-5 bg-gradient-to-br from-purple-500 to-purple-700 rounded-md shadow-lg shadow-purple-700/75 border border-purple-400/50">
+            <span>
+                <svg class="text-purple-200 w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M12 2.25a.75.75 0 0 1 .75.75v.756a49.106 49.106 0 0 1 9.152 1 .75.75 0 0 1-.152 1.485h-1.918l2.474 10.124a.75.75 0 0 1-.375.84A6.723 6.723 0 0 1 18.75 18a6.723 6.723 0 0 1-3.181-.795.75.75 0 0 1-.375-.84l2.474-10.124H12.75v13.28c1.293.076 2.534.343 3.697.776a.75.75 0 0 1-.262 1.453h-8.37a.75.75 0 0 1-.262-1.453c1.162-.433 2.404-.7 3.697-.775V6.24H6.332l2.474 10.124a.75.75 0 0 1-.375.84A6.723 6.723 0 0 1 5.25 18a6.723 6.723 0 0 1-3.181-.795.75.75 0 0 1-.375-.84L4.168 6.241H2.25a.75.75 0 0 1-.152-1.485 49.105 49.105 0 0 1 9.152-1V3a.75.75 0 0 1 .75-.75Zm4.878 13.543 1.872-7.662 1.872 7.662h-3.744Zm-9.756 0L5.25 8.131l-1.872 7.662h3.744Z"
+                        clip-rule="evenodd" />
+                </svg>
+            </span>
+        </div>
+        <h2 class="text-2xl text-white font-stix mt-5">
+            Usage based pricing.
+        </h2>
+        <p class="text-zinc-300 font-grotesk md:text-center">
+            Our pricing is made to scale with your stream,
+            and it gets cheaper the more you use it
+        </p>
+    </div>
+
+
+</section>
+
+
+<section class="flex flex-col-reverse md:flex-row font-grotesk min-h-[80vh] justify-center items-center p-5 gap-5 md:gap-8 mt-10">
+
+    <div class="flex-1 max-w-[500px] lg:mx-0 text-center justify-center md:justify-start md:text-left mt-10 md:mt-0 pt-10 md:pt-0">
+        <h2 class="text-3xl sm:text-4xl text-gray-200 font-stix">
+            Start today
+        </h2>
+
+        <p class="mt-4 text-zinc-300 font-grotesk">
+            You can sign up with your Twitch account today and try it for free without the need of adding your credit card details.
+        </p>
+
+        
+        <a 
+        href="{% url 'login' %}"
+        class="text-white mt-5 inline-flex font-grotesk bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-md text-xl px-5 py-2.5 text-center mb-2">
+            Get started for free
+        </a>
+      
+    </div>
+
+    <div class="flex flex-col flex-1 gap-5">
+        <details class="group rounded-lg bg-zinc-950 border border-zinc-900 backdrop-blur-xl  p-6 [&_summary::-webkit-details-marker]:hidden" open>
+            <summary class="flex cursor-pointer items-center justify-between gap-1.5 text-zinc-200">
+                <h2 class="font-bold">Can I customize the bits ammount required to generate a sound effect?</h2>
+    
+                <span class="relative size-5 shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="absolute inset-0 size-5 opacity-100 group-open:opacity-0" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+    
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="absolute inset-0 size-5 opacity-0 group-open:opacity-100" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </span>
+            </summary>
+    
+            <p class="mt-4 leading-relaxed text-zinc-300">
+                You can customize the bit ammount, set a minimum ammount, or requiring a exact match to generate and play a sound effect. There is also 
+                the posibility of requiring a specific command to run the generation.
+            </p>
+        </details>
+
+        <details class="group rounded-lg bg-zinc-950 border border-zinc-900 backdrop-blur-xl  p-6 [&_summary::-webkit-details-marker]:hidden" >
+            <summary class="flex cursor-pointer items-center justify-between gap-1.5 text-zinc-200">
+                <h2 class="font-bold">Can I generate multiple sound effects for the same cheer?</h2>
+    
+                <span class="relative size-5 shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="absolute inset-0 size-5 opacity-100 group-open:opacity-0" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+    
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="absolute inset-0 size-5 opacity-0 group-open:opacity-100" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </span>
+            </summary>
+    
+            <p class="mt-4 leading-relaxed text-zinc-300">
+                Yes, you can easily re-generate sound effects from your dashboard.
+            </p>
+        </details>
+
+        <details class="group rounded-lg bg-zinc-950 border border-zinc-900 backdrop-blur-xl  p-6 [&_summary::-webkit-details-marker]:hidden" >
+            <summary class="flex cursor-pointer items-center justify-between gap-1.5 text-zinc-200">
+                <h2 class="font-bold">Can I replay a sound effect on my stream?</h2>
+    
+                <span class="relative size-5 shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="absolute inset-0 size-5 opacity-100 group-open:opacity-0" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+    
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="absolute inset-0 size-5 opacity-0 group-open:opacity-100" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </span>
+            </summary>
+    
+            <p class="mt-4 leading-relaxed text-zinc-300">
+                Yes, you can replay any of the generated sound effects in your stream from your dashboard.
+            </p>
+        </details>
+
+
+        <details class="group rounded-lg bg-zinc-950 border border-zinc-900 backdrop-blur-xl  p-6 [&_summary::-webkit-details-marker]:hidden" >
+            <summary class="flex cursor-pointer items-center justify-between gap-1.5 text-zinc-200">
+                <h2 class="font-bold">Is there a limit of generations for each month?</h2>
+    
+                <span class="relative size-5 shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="absolute inset-0 size-5 opacity-100 group-open:opacity-0" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+    
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="absolute inset-0 size-5 opacity-0 group-open:opacity-100" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </span>
+            </summary>
+    
+            <p class="mt-4 leading-relaxed text-zinc-300">
+                No. There is no limit to the ammount of generations you can do, our pricing scales with the usage you get and it gets cheaper as you go.
+            </p>
+        </details>
+    
+        <details class="group rounded-lg bg-zinc-950 border border-zinc-900 p-6 [&_summary::-webkit-details-marker]:hidden">
+            <summary class="flex cursor-pointer items-center justify-between gap-1.5 text-zinc-200">
+                <h2 class="font-bold">Is there a minimum ammount I need to pay each month? </h2>
+    
+                <span class="relative size-5 shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 opacity-100 group-open:opacity-0"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+    
+                    <svg xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 opacity-0 group-open:opacity-100"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </span>
+            </summary>
+    
+            <p class="mt-4 leading-relaxed text-zinc-300">
+                Only $5. If your usage is less than 50 runs each month, you will be billed $5 in that month. 
+            </p>
+        </details>
+    
+    </div>
+   
+</section>
+
+
+<footer class="bg-zinc-950 text-zinc-300">
+    <div class="mt-16 border-t border-zinc-800 pt-8">
+        <p class="text-center text-xs/relaxed text-gray-500">
+            © Soundbits 2024. All rights reserved.
+        </p>
+        </div>
+    </div>
+</footer>
+  
+
+{% endblock %}

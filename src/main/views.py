@@ -99,7 +99,8 @@ def broadcaster_overlay(request, user_id):
 @login_required
 def overview(request):
     template_name = "dashboard/overview.html"
-    logs = CheerEventLogEntry.objects.filter(internal_broadcaster_user=request.user).order_by("-timestamp")
+    
+    logs = CheerEventLogEntry.objects.filter(internal_broadcaster_user=request.user)
     context = {
         "username": request.user.username, 
         "logs": logs,
@@ -108,6 +109,13 @@ def overview(request):
         "ignored_status": IGNORED_STATUS,
         "new_status": NEW_STATUS
         }
+
+    if request.user.billing_plan == SubscriptionPlanOptions.FREE_PLAN:
+        context.update({
+            "used": BillingService._free_runs_count(request.user),
+            "max_usage": request.user.max_free_runs
+        })
+
     return render(request, template_name, context)
 
 
@@ -120,7 +128,7 @@ def hx_get_log_details(request, cheer_log_id):
         "failed_status": FAILED_STATUS,
         "done_status": DONE_STATUS,
         "ignored_status": IGNORED_STATUS,
-        "new_status": NEW_STATUS
+        "new_status": NEW_STATUS,
     }
     return render(request, template_name, context)
 
@@ -130,16 +138,35 @@ def hx_get_log_details(request, cheer_log_id):
 def hx_generate_sfx(request):
     cheer_log_id = request.POST.get("cheer_log_id")
 
-    template_name = "dashboard/partials/sfx_control.html"
+    toast_template_name = "dashboard/ui/toast.html"
     cheer_log_object = get_object_or_404(CheerEventLogEntry, id=cheer_log_id)
-    sfx = SoundEffectRequestService.generate_sfx(
+    SoundEffectRequestService.generate_sfx.after_response(
         request.user,
         cheer_log_object, 
         send_to_consumers=False
     )
 
-    context = {"sfx_request": sfx}
+    messages.success(request,"SFX generation started")
+
+    return render(request, toast_template_name)
+
+@login_required
+def hx_sfx_list_for_cheer_log(request, cheer_log_id):
+    query = SoundEffectRequest.objects.filter(
+        cheer_event_log__id=cheer_log_id
+    )
+    template_name = "dashboard/partials/sfx_control_list.html"
+
+    context = {
+        "failed_status": FAILED_STATUS,
+        "done_status": DONE_STATUS,
+        "ignored_status": IGNORED_STATUS,
+        "new_status": NEW_STATUS,
+        "sfx_list": query
+    }
+
     return render(request, template_name, context)
+
 
 @login_required
 def hx_send_sfx_to_consumers(request, sfx_request_id):
@@ -154,7 +181,11 @@ def hx_send_sfx_to_consumers(request, sfx_request_id):
         user=request.user
     )
     
-    SoundEffectRequestService._send_event_to_consumers(str(request.user.id), sfx.generated_file.url)
+    SoundEffectRequestService._send_event_to_consumers(
+        sfx.generated_file.url,
+        str(request.user.id), 
+        sfx.cheer_event_log
+    )
     messages.success(request, "Sent sound effect to your overlay")
     return render(request, template_name)
 
@@ -182,6 +213,8 @@ def alert_preferences_form(request):
 
     return render(request, template_name, context)
 
+
+
 @login_required
 def billing_view(request):
     context = {
@@ -193,11 +226,7 @@ def billing_view(request):
     }
     if request.user.billing_plan == SubscriptionPlanOptions.FREE_PLAN:
         context.update({
-            "used": SoundEffectRequest.objects.filter(
-                cheer_event_log__internal_broadcaster_user=request.user,
-                status=DONE_STATUS,
-                is_metered=False
-            ).count()
+            "used": BillingService._free_runs_count(request.user)
         })
 
     elif request.user.billing_plan == SubscriptionPlanOptions.PAID_PLAN and request.user.has_lemon_billing_setup:

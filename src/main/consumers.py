@@ -20,9 +20,5 @@ class CheerEventConsumer(WebsocketConsumer):
 
     def play_sfx(self, event):
         template_name = "overlay/partials/sfx_player.html"
-        html = get_template(template_name).render(
-            context = {
-                "sfx_source": event["sfx_source"]
-            }
-        )
+        html = get_template(template_name).render(event)
         self.send(text_data=html)

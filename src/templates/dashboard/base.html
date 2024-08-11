@@ -3,8 +3,8 @@
 {% block content %}
 {% include "dashboard/partials/header.html" %}
 
-    <!--Django Messages wrapper.-->
-    <section id="system-message" class="fixed top-5 right-5"></section>
+    <!--Django Messages wrapper.-->    
+    {% include 'dashboard/ui/toast.html' %}
 
     {% block dashcontent %}
     {% endblock %}

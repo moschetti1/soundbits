@@ -39,7 +39,7 @@ Overview
    <div class="text-gray-200 rounded-lg flex flex-col gap-5">
 
       {% if request.user.billing_plan == 'Free' %}
-      {% include 'dashboard/partials/free_trial_usage.html' with used=10 max_usage=15 %}
+      {% include 'dashboard/partials/free_trial_usage.html'%}
       {%endif%}
 
       {% for log in logs %}
@@ -88,6 +88,7 @@ Overview
    }
 
 </script>
+
 
 {% endblock %}
 

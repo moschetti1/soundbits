@@ -12,9 +12,11 @@
 
 
 {% if request.user.billing_plan  == free_plan_constant%}
-
+<div class="mt-10">
+    {% include "dashboard/partials/free_trial_usage.html" with hide_cta=True%}
+</div>
 {% include "dashboard/partials/billing_free_plan_upgrade_form.html" %}
-{% include "dashboard/partials/free_trial_usage.html" with hide_cta=True%}
+
 {% else %}
 {% include "dashboard/partials/billing_current_plan_info.html" %}
 {% endif %}

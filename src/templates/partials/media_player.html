@@ -1,0 +1,26 @@
+<div class="relative flex-1 flex-col opacity-0 animate-[fadeIn_0.5s_0.5s_forwards] bg-black/35 backdrop-blur-xl rounded-lg p-5 md:px-8 gap-2 ">
+
+    <div class="flex justify-between items-center">
+        <div class="">
+            <div class="inline-flex items-center">
+                <img src="https://media.tenor.com/izJVS6Wb-lYAAAAi/bits.gif" class="w-3" alt="">
+                <h2 class="ml-1 font-bold">100</h2>
+            </div>
+            <h2 class="font-bold">{{username}}</h2>
+        </div>
+        <media-controller audio class="bg-transparent">
+           
+                <audio
+                slot="media"
+                src="{{audio_source_url}}"
+                crossorigin>
+                </audio>
+
+            <media-play-button class="bg-purple-600 text-black rounded-full ">
+            
+            </media-play-button>
+        </media-controller>
+    </div>
+
+    <p class="text-zinc-300 mt-5">"{{prompt}}"</p>
+</div>

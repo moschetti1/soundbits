@@ -1,5 +1,34 @@
 
+<div id="player-container" class="absolute top-5 right-5 w-[475px]" hx-swap-oob="outerHTML">
+<media-controller  audio class="w-full p-2 bg-zinc-800/75 rounded-lg text-gray-200 font-grotesk text-lg">
+    <div class="flex flex-col gap-1">
+        <media-time-range 
+        class="bg-transparent w-full h-5">            
+        </media-time-range>
+        
+        <div class="flex justify-between px-2 items-center">
+            <h2 class="font-bold">{{username}}</h2>
+            
+            <div class="inline-flex items-center">
+                <img src="https://media.tenor.com/izJVS6Wb-lYAAAAi/bits.gif" class="w-5" alt="">
+                <p class="font-bold">{{bits}}</p>
+            </div>
+        </div>
+            
+        <div class="px-2 py-1">
+            <p>"{{prompt}}"</p>
+        </div>    
+    </div>
 
-<audio id="player" controls onended="hidePlayer()" oncanplay="play()">
-    <source src="{{sfx_source}}">
-</audio>
+    <audio
+    id="player"
+    slot="media"
+    src="{{sfx_source}}"
+    crossorigin
+    onended="hidePlayer()" 
+    oncanplay="play()">
+    </audio>
+</media-controller>
+<p class="text-center text-sm text-gray-300">powered by <strong>soundbits.live</strong></p>
+
+</div>

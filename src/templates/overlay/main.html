@@ -4,16 +4,16 @@
 
 <div hx-ext="ws" ws-connect="{{socket_url}}">
     
-    <audio id="player" hx-swap-oob="outerHTML">
+    <div id="player-container" hx-swap-oob="outerHTML">
+        <audio id="play"></audio>
+    </div>
 
-    </audio>
-    
 </div>
 
 
 <script>
     function hidePlayer() {
-        let audio = document.getElementById("player")
+        let audio = document.getElementById("player-container")
         audio.style.display = "none"
     }
 

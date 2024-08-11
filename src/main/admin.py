@@ -20,6 +20,14 @@ admin.site.register(CheerEventLogEntry, CheerLogAdmin)
 
 
 class SoundEffectRequestAdmin(admin.ModelAdmin):
-    list_display = ["cheer_event_log", "status"]
+    list_display = ["timestamp","cheer_event_log", "status", "is_metered", "has_recorded_usage"]
 
-admin.site.register(SoundEffectRequest)
+    def get_ordering(self, request):
+        return ['-timestamp']
+
+    def has_recorded_usage(self, obj):
+        return bool(obj.usage_record_id)
+    has_recorded_usage.boolean = True
+
+
+admin.site.register(SoundEffectRequest, SoundEffectRequestAdmin)

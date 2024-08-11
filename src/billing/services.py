@@ -15,13 +15,20 @@ logger = logging.getLogger('django')
 
 class BillingService:
 
+
+    @staticmethod
+    def _free_runs_count(user):
+        return SoundEffectRequest.objects.filter(
+                cheer_event_log__internal_broadcaster_user=user,
+                status=DONE_STATUS,
+                is_metered=False
+            ).count()
+
     @staticmethod
     def _is_valid_billing_status(user):
         """Checks that the user is in a plan that allows new runs/generations."""
         if user.billing_plan == SubscriptionPlanOptions.FREE_PLAN:
-            runs_count = SoundEffectRequest.objects.filter(
-                cheer_event_log__internal_broadcaster_user=user, 
-                status=DONE_STATUS).count()
+            runs_count = BillingService._free_runs_count(user)
             return runs_count < user.max_free_runs
 
         return user.billing_plan == SubscriptionPlanOptions.PAID_PLAN
@@ -29,7 +36,7 @@ class BillingService:
     @staticmethod
     def _has_metered_usage(user):
         return user.billing_plan == SubscriptionPlanOptions.PAID_PLAN
-
+        
     @staticmethod    
     def enable_user_subscription(user):
         user.billing_plan = SubscriptionPlanOptions.PAID_PLAN

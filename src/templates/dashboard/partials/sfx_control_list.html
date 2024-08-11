@@ -1,3 +1,4 @@
+{% for sfx in sfx_list %}
 
 {% if sfx.status == done_status %}
 <media-controller audio class="bg-transparent">
@@ -33,4 +34,10 @@
 <div class="p-2 py-3 w-full text-sm text-red-400 border border-red-400 rounded-md">
     <p>Failed reason: {{sfx.failed_reason}}</p>
 </div>
+
+
 {%endif%}
+
+{% endfor %}
+
+

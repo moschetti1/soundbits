@@ -2,9 +2,10 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from main import views
-from .views import login_template
+from .views import login_template, home
 from billing import views as billing_views
 urlpatterns = [
+    path("", home, name="home"),
     path("admin/", admin.site.urls),
     path('accounts/', include("allauth.urls")),
     path("login/", login_template, name="login"),

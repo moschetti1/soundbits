@@ -1,33 +1,66 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% load socialaccount %}
 
 
-
 {% block content %}
+<style>
+    body {
+        background-image: url('{% static "images/blurry_bg.webp" %}');
+        background-position-y: -500px;
+        transform: rotate(180);
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: scroll;
+    }
+</style>
 
 
-<div class="flex flex-col p-2 md:ps-5 gap-6 max-w-[450px] mx-auto border border-zinc-800 rounded-lg">
+<div class="h-[80vh] flex flex-col justify-center items-center animate-fade">
 
-   <div>
-    <h1 class="text-white text-3xl font-medium font-grotesk">Get started for free</h1>
-    
-   
-   </div>
-   <p class="text-gray-200 text-md font-grotesk">Log in or sign up to SoundBits using your twitch account.</p>
-    <form action="{% provider_login_url 'twitch' %}" method="POST">
-        {% csrf_token %}
-        <button
-        type="submit" 
-        class=" flex flex-row justify-center  items-center w-full text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 font-medium rounded-md text-sm px-5 py-2.5 text-center me-2 mb-2">
-        
-            <svg class="w-5 h-5 me-2 " xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img"  preserveAspectRatio="xMidYMid meet" viewBox="0 0 16 16">
-                <g fill="currentColor"><path d="M3.857 0L1 2.857v10.286h3.429V16l2.857-2.857H9.57L14.714 8V0zm9.714 7.429l-2.285 2.285H9l-2 2v-2H4.429V1.143h9.142z"></path><path d="M11.857 3.143h-1.143V6.57h1.143zm-3.143 0H7.571V6.57h1.143z"></path></g>
+    <div class="max-w-[450px]">
+        <a href="/" class="font-grotesk text-gray-200 inline-flex items-center">
+            <svg height="21" viewBox="0 0 21 21" width="21" xmlns="http://www.w3.org/2000/svg">
+                <g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                    transform="translate(3 6)">
+                    <path d="m4.499.497-3.999 4.002 4 4.001" />
+                    <path d="m13.5 4.5h-13" />
+                </g>
             </svg>
-        
-            Sign in with Twitch
-        </button>
-    </form>
-</div>    
+
+            Go back
+        </a>
+
+
+        <div
+            class="flex flex-col p-5 gap-5 md:gap-8 mx-auto border border-zinc-800 bg-black/35 backdrop-blur-xl rounded-lg">
+
+            <div>
+                <h1 class="text-white text-2xl md:text-3xl font-medium font-grotesk">Get started for free</h1>
+            </div>
+            <p class="text-gray-200 text-md font-grotesk">Log in or sign up to SoundBits using your twitch account.</p>
+            <form action="{% provider_login_url 'twitch' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit"
+                    class=" flex flex-row justify-center  items-center w-full text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 font-medium rounded-md text-sm px-5 py-2.5 text-center me-2 mb-2">
+
+                    <svg class="w-5 h-5 me-2 " xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img"
+                        preserveAspectRatio="xMidYMid meet" viewBox="0 0 16 16">
+                        <g fill="currentColor">
+                            <path
+                                d="M3.857 0L1 2.857v10.286h3.429V16l2.857-2.857H9.57L14.714 8V0zm9.714 7.429l-2.285 2.285H9l-2 2v-2H4.429V1.143h9.142z">
+                            </path>
+                            <path d="M11.857 3.143h-1.143V6.57h1.143zm-3.143 0H7.571V6.57h1.143z"></path>
+                        </g>
+                    </svg>
+
+                    Sign in with Twitch
+                </button>
+            </form>
+        </div>
+
+    </div>
+</div>
 
 {% endblock %}

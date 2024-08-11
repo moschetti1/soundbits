@@ -51,6 +51,9 @@ class CheerEventLogEntry(models.Model):
     def __str__(self):
         return str(self.broadcaster_user_name)
 
+    class Meta:
+        ordering = ["-timestamp"]
+
 #if we want to support more alert types, a unique model for preferences based on each type might be necessary. for now this is all we need. 
 class AlertPreferences(models.Model):
     id = models.UUIDField(
@@ -108,6 +111,9 @@ class SoundEffectRequest(models.Model):
     @property
     def has_usage_record(self):
         return bool(self.usage_record_id)
+
+    class Meta:
+        ordering = ["-timestamp"]
 
 
 @receiver(user_signed_up)

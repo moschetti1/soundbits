@@ -52,11 +52,14 @@ class TwitchWebhookHandler:
 class SoundEffectRequestService:
 
     @staticmethod
-    def _send_event_to_consumers(user_id, sfx_source):
+    def _send_event_to_consumers(sfx_source, user_id, cheer_log):
         channel_layer = get_channel_layer()
         event = {
             "type": "play_sfx",
-            "sfx_source": sfx_source
+            "sfx_source": sfx_source,
+            "username": cheer_log.user_name if not cheer_log.is_anonymous else "Anonymous",
+            "prompt": cheer_log.message,
+            "bits": cheer_log.bits
         }
         async_to_sync(channel_layer.group_send)(
             user_id, event
@@ -143,8 +146,9 @@ class SoundEffectRequestService:
 
         if send_to_consumers:
             SoundEffectRequestService._send_event_to_consumers(
-                str(user.id), 
-                sfx_request.generated_file.url
+                sfx_request.generated_file.url, 
+                str(user.id),
+                cheer_event_log
             )
 
         if is_metered:    
