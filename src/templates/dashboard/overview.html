@@ -7,6 +7,7 @@ Overview
 
 {% block dashcontent %}
 
+
 {%if not logs%}
 
 <div class="p-5 align-middle font-grotesk max-w-[700px] mx-auto mt-10 pt-8">
@@ -15,18 +16,18 @@ Overview
       <svg class="w-44 text-zinc-500 mx-auto"  viewBox="0 0 21 21"  xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" transform="translate(3 4)"><path d="m2.72727273 7.03333352c1.02437795-.83427197 2.21938157-1.36122508 3.4593052-1.58085933m2.49530185-.03060587c1.30622661.19837518 2.56985592.73553025 3.64539322 1.6114652m-12.04090936-2.36666667c1.00768121-.86850363 2.13840543-1.52472018 3.3320224-1.96864965m2.08967936-.55194893c3.14127124-.50961507 6.4645995.33058446 9.0055713 2.52059858"/><path d="m1 0 13 13.071"/><path d="m5.13409091 9.4066669c1.41874807-.9855538 3.31988897-.9855538 4.7386367 0"/><circle cx="7.5" cy="11.5" fill="currentColor" r="1"/></g></svg>
 
 
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col gap-2" x-data="{copied: false}">
          <h1 class="text-xl text-zinc-300 font-medium">Nothing here... for now</h1>
          <p class="text-zinc-500">While we wait make sure you copy your overlay URL as a browser source in OBS.</p>
          
          <div class="relative">
             <input id="overlayID" type="text" class="input-text block" value="https://{{request.get_host}}{% url 'overlay' user_id=request.user.id %}" disabled>
-            <button type="button" onclick="copyToClipboard()" class="inline-flex items-center gap-1 text-white absolute end-1.5 bottom-1.5 bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-2 pe-3 py-1.5 ">
+            <button @click="copied=true" type="button" onclick="copyToClipboard()" class="inline-flex items-center gap-1 text-white absolute end-1.5 bottom-1.5 bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-2 pe-3 py-1.5 ">
                <svg class="w-5 m-0" height="21" viewBox="0 0 21 21" width="21" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" transform="translate(3 3)"><path d="m11.5 9.5v-7c0-1.1045695-.8954305-2-2-2h-7c-1.1045695 0-2 .8954305-2 2v7c0 1.1045695.8954305 2 2 2h7c1.1045695 0 2-.8954305 2-2z"/><path d="m3.5 11.5v1c0 1.1045695.8954305 2 2 2h7c1.1045695 0 2-.8954305 2-2v-7c0-1.1045695-.8954305-2-2-2h-1"/></g></svg>
                Copy
             </button>
          </div>
-         
+         <p x-show="copied" class="text-sm text-emerald-400">Copied to clipboard!</p>
          
       </div>
    </div>

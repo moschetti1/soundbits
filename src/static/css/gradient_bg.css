@@ -1,0 +1,25 @@
+body {
+    background-image: url('/static/images/bg.png') !important;
+    background-position-y: -500px;
+    transform: rotate(180) !important;
+    background-size: cover !important;
+    background-repeat: no-repeat;
+}
+
+@media screen and (max-width: 600px) {
+    body {
+        background-position-y: -1500px;
+        background-position-x: -500px;
+        background-size: cover;
+        transform: rotate(-180);
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    body {
+        background-position-y: -1000px;
+        background-position-x: -300px;
+        background-size: cover;
+        transform: rotate(-180);
+    }
+}

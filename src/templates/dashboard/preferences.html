@@ -7,6 +7,36 @@ Preferences
 
 {% block dashcontent %}
 
+<div x-data="{copied: false}">
+<div class="relative mt-10">
+    <h2 class="text-lg font-grotesk text-white pb-1 font-medium">
+        Your overlay URL
+    </h2>
+    <input id="overlayID" type="text" class="input-text block" value="https://{{request.get_host}}{% url 'overlay' user_id=request.user.id %}" disabled>
+    <button 
+    type="button" 
+    @click="copied=true"
+    onclick="copyToClipboard()" 
+    class="inline-flex items-center gap-1 text-white absolute end-1.5 bottom-1.5 bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-2 pe-3 py-1.5 ">
+       <svg class="w-5 m-0" height="21" viewBox="0 0 21 21" width="21" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" transform="translate(3 3)"><path d="m11.5 9.5v-7c0-1.1045695-.8954305-2-2-2h-7c-1.1045695 0-2 .8954305-2 2v7c0 1.1045695.8954305 2 2 2h7c1.1045695 0 2-.8954305 2-2z"/><path d="m3.5 11.5v1c0 1.1045695.8954305 2 2 2h7c1.1045695 0 2-.8954305 2-2v-7c0-1.1045695-.8954305-2-2-2h-1"/></g></svg>
+       Copy
+    </button>
+    
+ </div>
+ <p x-show="copied" class="text-sm text-emerald-400">Copied to clipboard!</p>
+ <hr class="border-zinc-800 mt-5">
+</div>
 {% include "dashboard/partials/alert_preferences_form.html" %}
+
+
+
+<script>
+    function copyToClipboard() {
+      var overlayInput = document.getElementById("overlayID")
+      overlayInput.select()
+      overlayInput.setSelectionRange(0, 99999);
+      navigator.clipboard.writeText(overlayInput.value);
+    }
+</script>
 
 {% endblock %} 

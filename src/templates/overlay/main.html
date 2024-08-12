@@ -13,8 +13,10 @@
 
 <script>
     function hidePlayer() {
-        let audio = document.getElementById("player-container")
-        audio.style.display = "none"
+        let wrapper = document.getElementById("player-container")
+        wrapper.style.display = "none"
+        let audio = document.getElementById("player")
+        audio.remove()
     }
 
     function play() {

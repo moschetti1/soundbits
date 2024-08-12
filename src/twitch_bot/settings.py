@@ -215,7 +215,7 @@ if USE_S3:
             "BACKEND": "storages.backends.s3.S3Storage",
             "OPTIONS": {
                 "location": MEDIA_FILES_FOLDER,
-                "default_acl": "public-read",
+                "default_acl": "publicRead",
                 "file_overwrite": False
             },
         },
@@ -223,7 +223,7 @@ if USE_S3:
             "BACKEND": "storages.backends.s3.S3Storage",
             "OPTIONS": {
                 "location": STATIC_FILES_FOLDER,
-                "default_acl": "public-read"
+                "default_acl": "publicRead"
             },
         }
     }
