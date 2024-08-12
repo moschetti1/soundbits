@@ -8,7 +8,7 @@
     <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
         <div class="bg-purple-600 h-2.5 rounded-full dark:bg-purple-500" style="width: {% if used > usage_limit%}100%{%else%}{% widthratio used usage_limit 100 %}%{%endif%}"></div>
     </div>
-    
+    <!--
     {% if not hide_cta %}
     {% if used >= usage_limit %}
     <a
@@ -20,5 +20,6 @@
     <a href="{%url 'dashboard:billing' %}" class="text-sm underline text-gray-300 cursor-pointer">Unlock unlimited requests by upgrading to the creator plan</a>
     {% endif %}
     {% endif %}
+    -->
 </div>
 {% endwith %}

@@ -22,7 +22,7 @@
             >
             Preferences
             </a>
-
+            <!--
             <a
             href="{{billing}}"
             class="{%if request.get_full_path == billing %}shrink-0 font-medium text-xs py-1.5 px-3 bg-zinc-950 text-white rounded-lg{%else%}shrink-0 font-medium text-xs py-1.5 px-3 text-gray-400{%endif%}"
@@ -30,7 +30,7 @@
             >
             Account Settings
             </a>
-            
+            -->
         </nav>
   
     </div>
@@ -60,9 +60,11 @@
             <li>
                 <a href="{{preferences}}" class="block px-4 py-2 hover:bg-zinc-800 hover:text-white">Preferences</a>
             </li>
+            <!--
             <li>
                 <a href="{{billing}}" class="block px-4 py-2 hover:bg-zinc-800 hover:text-white">Settings</a>
             </li>
+            -->
             </ul>
             <div class="py-2">
                 <form method="POST" action="{% url 'account_logout' %}">
