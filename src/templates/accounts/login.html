@@ -64,6 +64,26 @@ Soundbits - get started
         </div>
 
     </div>
+    <div class="group flex text-center text-xs/relaxed text-gray-500 justify-center underline gap-3 mt-5">
+        <a 
+        href="{% url 'privacy-policy' %}" 
+        class="hover:text-white flex" 
+        target="_blank">
+            Privacy policy
+        </a>
+        <a 
+        href="{% url 'terms-of-service' %}" 
+        class="hover:text-white flex"
+        target="_blank">
+            Terms and conditions
+        </a>
+        <a 
+        href="{% url 'refunds-policy' %}" 
+        class="hover:text-white flex"
+        target="_blank">
+            Refunds policy
+        </a>
+    </div>
 </div>
 
 {% endblock %}
