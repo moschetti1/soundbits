@@ -8,18 +8,18 @@
     <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
         <div class="bg-purple-600 h-2.5 rounded-full dark:bg-purple-500" style="width: {% if used > usage_limit%}100%{%else%}{% widthratio used usage_limit 100 %}%{%endif%}"></div>
     </div>
-    <!--
+    
     {% if not hide_cta %}
-    {% if used >= usage_limit %}
-    <a
-    href="{%url 'dashboard:billing' %}" 
-    class="w-full mt-5 text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 font-medium rounded-md text-sm px-5 py-2.5 text-center me-2 mb-2">
-        Upgrade
-    </a>
-    {%else%}
-    <a href="{%url 'dashboard:billing' %}" class="text-sm underline text-gray-300 cursor-pointer">Unlock unlimited requests by upgrading to the creator plan</a>
+        {% if used >= usage_limit %}
+        <a
+        href="{%url 'dashboard:billing' %}" 
+        class="w-full mt-5 text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 font-medium rounded-md text-sm px-5 py-2.5 text-center me-2 mb-2">
+            Upgrade
+        </a>
+        {%else%}
+        <a href="{%url 'dashboard:billing' %}" class="text-sm underline text-gray-300 cursor-pointer">Unlock unlimited requests by upgrading to the creator plan</a>
+        {% endif %}
     {% endif %}
-    {% endif %}
-    -->
+  
 </div>
 {% endwith %}

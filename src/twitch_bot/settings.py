@@ -148,6 +148,7 @@ AUTHENTICATION_BACKENDS = [
 
 SOCIALACCOUNT_PROVIDERS = {
     'twitch': {
+        'EMAIL_AUTHENTICATION': True,
         'APP': {
             "client_id": os.environ.get("TWITCH_APP_CLIENT_ID", "empty"),
             "secret": os.environ.get("TWITCH_APP_CLIENT_SECRET", "empty"),
@@ -156,13 +157,15 @@ SOCIALACCOUNT_PROVIDERS = {
         'SCOPE': [
             'channel:read:subscriptions',
             'channel:read:redemptions',
-            'bits:read'
+            'bits:read',
+            'user:read:email'
         ]
     }
 }
 
 SOCIALACCOUNT_ONLY = True
 SOCIALACCOUNT_STORE_TOKENS = True
+ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 #BUILD REDIRECT URI OF PROVIDER WITH HTTPS
